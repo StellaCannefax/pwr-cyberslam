@@ -1,19 +1,24 @@
 
 var Module;
+
 if (typeof Module === 'undefined') Module = eval('(function() { try { return Module || {} } catch(e) { return {} } })()');
+
 if (!Module.expectedDataFileDownloads) {
   Module.expectedDataFileDownloads = 0;
   Module.finishedDataFileDownloads = 0;
 }
 Module.expectedDataFileDownloads++;
 (function() {
+ var loadPackage = function(metadata) {
 
     var PACKAGE_PATH;
     if (typeof window === 'object') {
       PACKAGE_PATH = window['encodeURIComponent'](window.location.pathname.toString().substring(0, window.location.pathname.toString().lastIndexOf('/')) + '/');
-    } else {
+    } else if (typeof location !== 'undefined') {
       // worker
       PACKAGE_PATH = encodeURIComponent(location.pathname.toString().substring(0, location.pathname.toString().lastIndexOf('/')) + '/');
+    } else {
+      throw 'using preloaded data can only be done on a web page or in a web worker';
     }
     var PACKAGE_NAME = 'Pizza_Pizza_Panic_WebGL.data';
     var REMOTE_PACKAGE_BASE = 'Pizza_Pizza_Panic_WebGL.data';
@@ -24,9 +29,10 @@ Module.expectedDataFileDownloads++;
     var REMOTE_PACKAGE_NAME = typeof Module['locateFile'] === 'function' ?
                               Module['locateFile'](REMOTE_PACKAGE_BASE) :
                               ((Module['filePackagePrefixURL'] || '') + REMOTE_PACKAGE_BASE);
-    var REMOTE_PACKAGE_SIZE = 6694735;
-    var PACKAGE_UUID = '0b3640bb-c313-45e6-a986-8371d18f8e26';
   
+      var REMOTE_PACKAGE_SIZE = 6639136;
+      var PACKAGE_UUID = 'a971f83b-d13d-41b8-b499-1a9c4693cf97';
+    
     function fetchRemotePackage(packageName, packageSize, callback, errback) {
       var xhr = new XMLHttpRequest();
       xhr.open('GET', packageName, true);
@@ -84,9 +90,11 @@ Module.expectedDataFileDownloads++;
     
   function runWithFS() {
 
-function assert(check, msg) {
-  if (!check) throw msg + new Error().stack;
-}
+    function assert(check, msg) {
+      if (!check) throw msg + new Error().stack;
+    }
+Module['FS_createPath']('/', 'Il2CppData', true, true);
+Module['FS_createPath']('/Il2CppData', 'Metadata', true, true);
 Module['FS_createPath']('/', 'Resources', true, true);
 
     function DataRequest(start, end, crunched, audio) {
@@ -123,15 +131,17 @@ Module['FS_createPath']('/', 'Resources', true, true);
         this.requests[this.name] = null;
       },
     };
-      new DataRequest(0, 8460, 0, 0).open('GET', '/level0');
-    new DataRequest(8460, 30084, 0, 0).open('GET', '/mainData');
-    new DataRequest(30084, 30103, 0, 0).open('GET', '/methods_pointedto_by_uievents.xml');
-    new DataRequest(30103, 1242183, 0, 0).open('GET', '/sharedassets0.assets');
-    new DataRequest(1242183, 2446949, 0, 0).open('GET', '/sharedassets0.resource');
-    new DataRequest(2446949, 4269177, 0, 0).open('GET', '/sharedassets1.assets');
-    new DataRequest(4269177, 4620255, 0, 0).open('GET', '/sharedassets1.resource');
-    new DataRequest(4620255, 6180627, 0, 0).open('GET', '/Resources/unity_default_resources');
-    new DataRequest(6180627, 6694735, 0, 0).open('GET', '/Resources/unity_builtin_extra');
+
+      new DataRequest(0, 8936, 0, 0).open('GET', '/level0');
+    new DataRequest(8936, 31864, 0, 0).open('GET', '/mainData');
+    new DataRequest(31864, 31883, 0, 0).open('GET', '/methods_pointedto_by_uievents.xml');
+    new DataRequest(31883, 1246519, 0, 0).open('GET', '/sharedassets0.assets');
+    new DataRequest(1246519, 1816226, 0, 0).open('GET', '/sharedassets0.resource');
+    new DataRequest(1816226, 2924766, 0, 0).open('GET', '/sharedassets1.assets');
+    new DataRequest(2924766, 3063276, 0, 0).open('GET', '/sharedassets1.resource');
+    new DataRequest(3063276, 4247980, 0, 0).open('GET', '/Il2CppData/Metadata/global-metadata.dat');
+    new DataRequest(4247980, 6135404, 0, 0).open('GET', '/Resources/unity_default_resources');
+    new DataRequest(6135404, 6639136, 0, 0).open('GET', '/Resources/unity_builtin_extra');
 
     function processPackageData(arrayBuffer) {
       Module.finishedDataFileDownloads++;
@@ -148,6 +158,7 @@ Module['FS_createPath']('/', 'Resources', true, true);
           DataRequest.prototype.requests["/sharedassets0.resource"].onload();
           DataRequest.prototype.requests["/sharedassets1.assets"].onload();
           DataRequest.prototype.requests["/sharedassets1.resource"].onload();
+          DataRequest.prototype.requests["/Il2CppData/Metadata/global-metadata.dat"].onload();
           DataRequest.prototype.requests["/Resources/unity_default_resources"].onload();
           DataRequest.prototype.requests["/Resources/unity_builtin_extra"].onload();
           Module['removeRunDependency']('datafile_Pizza_Pizza_Panic_WebGL.data');
@@ -172,5 +183,8 @@ Module['FS_createPath']('/', 'Resources', true, true);
     if (!Module['preRun']) Module['preRun'] = [];
     Module["preRun"].push(runWithFS); // FS is not initialized yet, wait for it
   }
+
+ }
+ loadPackage();
 
 })();
